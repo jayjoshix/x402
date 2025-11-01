@@ -35,14 +35,14 @@ Traditional payment systems charge 2.9% + $0.30 per transaction, making micropay
 
 ## ✨ Features
 
-- **Atomic Payment + Execution**: EIP-3009 USDC settlement and target function call occur in the same transaction—no race conditions, no off-chain coordination[11][12]
-- **Safer Meta-Transactions**: Uses `receiveWithAuthorization` variant to prevent front-running attacks that can occur with `transferWithAuthorization` in contract flows[12]
-- **Per-Function Pricing**: Configure price per ABI selector for granular monetization of individual endpoints[11]
-- **Target Allowlist**: Restrict callable contracts to minimize misuse and simplify security audits[13]
-- **Revenue Splits**: Distribute fees across multiple recipients in basis points with automatic treasury payouts[13]
-- **Optional Refunds**: Automatically refund undistributed remainder if downstream call fails[13]
-- **Verifiable Billing**: All transactions recorded on-chain; transparent, deterministic accounting with no chargebacks[14]
-- **AI Agent Ready**: Agents sign payments programmatically without accounts or key exchange, enabling trustless machine-to-machine commerce[15][16]
+- **Atomic Payment + Execution**: EIP-3009 USDC settlement and target function call occur in the same transaction—no race conditions, no off-chain coordination
+- **Safer Meta-Transactions**: Uses `receiveWithAuthorization` variant to prevent front-running attacks that can occur with `transferWithAuthorization` in contract flows
+- **Per-Function Pricing**: Configure price per ABI selector for granular monetization of individual endpoints
+- **Target Allowlist**: Restrict callable contracts to minimize misuse and simplify security audits
+- **Revenue Splits**: Distribute fees across multiple recipients in basis points with automatic treasury payouts
+- **Optional Refunds**: Automatically refund undistributed remainder if downstream call fails
+- **Verifiable Billing**: All transactions recorded on-chain; transparent, deterministic accounting with no chargebacks
+- **AI Agent Ready**: Agents sign payments programmatically without accounts or key exchange, enabling trustless machine-to-machine commerce
 
 ## 🏗 Architecture
 
@@ -118,7 +118,56 @@ Expected output: `Compiler run successful!`
 
 ## ⚡ Quick Start
 
+### 1. Deploy Locally (Anvil)
 
+```bash
+# Terminal 1: Start Anvil
+anvil
+
+# Terminal 2: Deploy to local Anvil
+export PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+export TREASURY_ADDRESS=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+export USDC_ADDRESS=0x036CbD53842c5426634e7929541eC2318f3dCF7e
+
+forge script script/Deploy.s.sol:DeployScript \
+  --rpc-url http://127.0.0.1:8545 \
+  --broadcast \
+  -vvv
+```
+
+**Output:**
+```
+Router: 0x5FbDB2315678afecb367f032d93F642f64180aa3
+Service: 0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+✅ [Success] Hash: 0x2774544b6f1ffb19f9d0832d63c9fea724855a0eebc665fb369e838b134a056a
+```
+
+### 2. Run Tests
+
+```bash
+forge test -vv
+```
+
+**Expected:**
+```
+Ran 3 tests for test/X402Pay2CallRouter.t.sol:X402Pay2CallRouterTest
+[PASS] testPayAndCall() (gas: 144273)
+[PASS] testCannotReuseNonce() (gas: 139906)
+[PASS] testUnauthorizedTargetReverts() (gas: 39829)
+```
+
+### 3. Update .env
+
+```bash
+cat > .env << EOF
+PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+TREASURY_ADDRESS=0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+USDC_ADDRESS=0x036CbD53842c5426634e7929541eC2318f3dCF7e
+BASE_SEPOLIA_RPC=https://sepolia.base.org
+ROUTER_ADDRESS=0x5FbDB2315678afecb367f032d93F642f64180aa3
+SERVICE_ADDRESS=0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512
+EOF
+```
 
 ## 💡 Usage
 
@@ -363,13 +412,9 @@ Contributions welcome! Please follow this workflow:
 
 
 
-## 🙏 Acknowledgments
 
-- [x402 Protocol](https://www.x402.org) by Coinbase for the HTTP 402 "Payment Required" standard
-- [EIP-3009](https://eips.ethereum.org/EIPS/eip-3009) by Dave Hoag for meta-transaction authorization
-- [Foundry](https://getfoundry.sh) for smart contract development
-- [OpenZeppelin](https://www.openzeppelin.com) for battle-tested contract libraries
-- Base team for low-cost, fast EVM execution
+
+
 
 ***
 
